@@ -2,6 +2,9 @@
 layout: page
 title: About
 permalink: /about/
+published: true
+comment: true
+comments: true
 ---
 
 Some information about you!
