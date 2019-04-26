@@ -1,8 +1,11 @@
 ---
 layout: post
-title: "A Full and Comprehensive Style Test"
-tags: [test, style]
+title: A Full and Comprehensive Style Test
+tags:
+  - test
+  - style
 comments: true
+published: false
 ---
 
 Below is just about everything you'll need to style in the theme. Check the source code to see the many embedded elements within paragraphs.
