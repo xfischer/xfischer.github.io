@@ -15,4 +15,5 @@ A place to include any other types of information that you'd like to include abo
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[xavier@fischer.ninja](mailto:xavier@fischer.ninja)
+Or follow the social links in the footer below
