@@ -23,8 +23,10 @@ More recently I have been involved in open source development. I am the co-owner
 
 I am also:
 - [a musician](https://soundcloud.com/xavierfischer). I play the bass, the guitar, the piano and the computer ;) with [Ableton Live](https://www.ableton.com),
-- [a visual artist](https://vimeo.com/assoalreves), doing live visuals with [OpenFrameworks](https://openframeworks.cc) and Kinects.
+- [a visual artist](https://vimeo.com/assoalreves), doing live visuals with [OpenFrameworks](https://openframeworks.cc) and Kinects,
+- an arts and culture supporter, big fan of my wife [Nicole Fischer](https://www.facebook.com/nicole.fischer.79677471).
 
+I started this blog because there are plenty of things I'd like to share, and I've always wanted to do a tech blog. It's now very easy with GitHub pages and [Jekyll Now](https://www.jekyllnow.com/).
 
 ### Contact me
 
