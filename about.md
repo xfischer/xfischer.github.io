@@ -7,7 +7,7 @@ comment: true
 comments: true
 ---
 
-I'm a French Developer from Aix-en-Provence, France. My predilection domain in .Net, and C#. I was certified as a Microsoft Certified Professional Developer.
+I'm a French Developer from Aix-en-Provence, France. My predilection domain is .Net, and C#. I was certified as a Microsoft Certified Professional Developer.
 
 I have worked since 2000 in the development area, in GIS, SQL Server Development.
 
