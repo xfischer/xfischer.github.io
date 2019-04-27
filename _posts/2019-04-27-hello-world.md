@@ -7,8 +7,6 @@ tags:
   - story
 ---
 
-# Hello World!
-
 First of all, thanks for reading this.
 
 This is my first blog post of the universe and I'm really happy to do it.
