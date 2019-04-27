@@ -84,7 +84,9 @@ Let's setup :
 - A library with a simple service. We want this service to log its activity.
 - A Console app referencing the library and calling the service.
 
-### 1. Starting point : a class with your `SimpleService`
+### 1. Starting point : a class library with your `MyService`
+
+Create a new Class Library project `MyNetStandardLib` targeting .Net Standard 2.0.
 
 Your service takes a param and simulates a long processing task for 1 second.
 
@@ -92,9 +94,9 @@ Your service takes a param and simulates a long processing task for 1 second.
 using System;
 using System.Threading;
 
-namespace MyLibrary
+namespace MyNetStandardLib
 {
-    public class MySimpleService
+    public class MyService
     {
         public void DoSomething(string theParam)
         {
@@ -119,28 +121,182 @@ nuget add Microsoft.Extensions.Logging.Abstractions
 
 Change the service class as follows:
 
-- Add a constructor taking an `ILogger<SimpleService>`
+- Add a constructor taking an `ILogger<MyService>`
 - Add a backing field for the logger
 
 ```csharp
-public class MySimpleService
+public class MyService
 {
     // backing field
     private readonly ILogger<MyService> _logger;
-    
+
     // constructor
-    public MySimpleService(ILogger<MyService> logger = null)
+    public MyService(ILogger<MyService> logger = null)
     {
-      _logger = logger;
+        _logger = logger;
     }
 
-    // ... DoSomething omitted for brievety
+    public void DoSomething(string theParam)
+    {
+        _logger?.LogInformation($"DoSometing with {theParam}...");
+
+        // Simultate something me do for 1 second
+        Thread.Sleep(1000);
+
+        // Test logs at each level
+        _logger?.LogTrace("DoSometing TRACE message");
+        _logger?.LogDebug("DoSometing DEBUG message");
+        _logger?.LogInformation("DoSometing INFO message");
+        _logger?.LogWarning("DoSometing WARN message");
+        _logger?.LogError("DoSometing ERROR message");
+        _logger?.LogCritical("DoSometing CRITICAL message");
+    }
 }
 ```
 
-At this point nothing has changed in the implementation. If a program was calling `MyService`it still can do it after recompilation because the ILogger is optional.
+At this point, apart from the new *Microsoft.Extensions.Logging.Abstractions* dependency, nothing has changed from a caller perspective.
 
-If the service had already a constructor, your could pass the ILogger as the last parameter.
+- If a program was calling `MyService` it still can do it after recompilation because the `ILogger` is optional.
+- If `null` is passed for the `ÌLogger`, the service still works thanks to the null check operator `_logger`**?**`.LogInformation()` which is equivalent to:
+
+```csharp
+if (_logger != null)  _logger.LogInformation(...);
+```
+
+Note that if you are migrating an existing service from your code that  already has a constructor with parameters, your could pass an optional ILogger as the last parameter.
+
+The ILogger passed as a parameter is perfectly suited for dependency injection. With dependency injection, we can register a concrete implementation of the Logger on the caller side. Let's do it the .Net way!
+
+### 4. The caller application, using dependency injection
+
+So, now we have a class library that is logging. How can connect the wires ?
+
+*ASP.Net Core has already a DI container and could call our library directly. But this is very well documented yet and falls outside the scope of this article.*
+
+We are going to create a simple Console App. Follow those steps, in order to setup dependency injection and logging:
+
+- Create a new Console App,
+- Add a project reference to `MyNetStandardLib`,
+- Add a NuGet package `Microsoft.Extensions.DependencyInjection`. This is the Microsoft DI container. There are plenty of others (AutoFac, StructureMap, Ninject among others), but I'll stick to the .Net Foundation stack.
+
+So let's change the `Program.cs` file from this:
+
+```csharp
+namespace TestConsole
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+        }
+    }
+}
+```
+
+to that:
+
+```csharp
+using Microsoft.Extensions.DependencyInjection;
+using System;
+
+namespace TestConsole
+{
+    // Program with Dependency Injection
+    // Still no logging support!
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Setting up dependency injection
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            // Get an instance of the service
+            var myService = serviceProvider.GetService<MyNetStandardLib.MyService>();
+
+            // Call the service (logs are made here)
+            myService.DoSomething();
+
+            Console.ReadLine();
+        }
+
+        private static void ConfigureServices(ServiceCollection services)
+        {
+            // Register service from the library
+            services.AddTransient<MyNetStandardLib.MyService>();
+        }
+    }
+}
+```
+
+Let's explain:
+
+- We create the DI container `ServicesCollection` and configure it in a separate method for clarity.
+- We register our `MyService` as a Transient (ie: short lived instance within the calling code variable's scope)
+- When we call `var myService = serviceProvider.GetService<MyNetStandardLib.MyService>();` the DI container will instanciate the `MyService` and will chech the dependency tree for the object and pass required instances that are registered within the container. As we have still not registered any `ILogger`, a `null` will be passed.
+- We can use the `myService` variable as usual, calling the `DoSomething` service
+
+### 5. Add Logging support
+
+We will add **Console** and **Debug** loggers. For a Console App, this will be useful because we will see logs in the console and in the *Output>Debug* window.
+
+Add the following NuGet packages:
+
+- `Microsoft.Extensions.Logging`
+- `Microsoft.Extensions.Logging.Console`
+- `Microsoft.Extensions.Logging.Debug`
+
+Add the following `using` statements at the top of `Program.cs``
+
+```csharp
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Logging.Debug;
+```
+
+Change the `ConfigureServices` method as follows:
+
+```csharp
+private static void ConfigureServices(ServiceCollection services)
+{
+    services.AddLogging(config =>
+    {
+        config.AddDebug(); // Log to debug (debug window in Visual Studio or any debugger attached)
+        config.AddConsole(); // Log to console (colored !)
+    })
+    .Configure<LoggerFilterOptions>(options =>
+    {
+        options.AddFilter<DebugLoggerProvider>(null /* category*/ , LogLevel.Information /* min level */);
+        options.AddFilter<ConsoleLoggerProvider>(null  /* category*/ , LogLevel.Warning /* min level */);
+    })
+    .AddTransient<MyNetStandardLib.MyService>(); // Register service from the library
+}
+```
+
+Very, **very** neat and powerful. Let's explain:
+
+- `services.AddLogging` allows us to add *various* loggers to the DI container and configure their options. Here we register the *Console* and *Debug* loggers with `AddConsole()` and `AddDebug()`: two extensions methods provided by their respective NuGet packages.
+- Then we configure (optionally) their filter level.
+  - The first parameter is the category: not very well documented, it acts as a *StartsWith* or *Contains* filter on the type name `T` of `ILogger<T>`, allowing to filter which logs we want to listen or mute.
+  - The second parameter takes a `LogLevel`, allowing to listen only when log have a lower greater or equal than the specifed parameter.
+
+Now, every time a `ILogger<T>` is required, as in our `MyService` constructor, an instance will be injected, and this instance will log to the destinations registered.
+
+### 6. Test run
+
+After the Console App launch, this is what we see in the Console window:
+
+And this is what we see in the Debug window:
+
+
+## Conclusion
+
+We have seen how powerful Dependency Injection is, and how we can build a library that supports logging without constrainind the calling application.
+
+You can find all the source files for this project here (Tested on VS2019, both Windows and Mac) : [https://github.com/xfischer/CoreLoggingTests](https://github.com/xfischer/CoreLoggingTests).
+
 
 ## Sources
 
