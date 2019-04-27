@@ -282,13 +282,18 @@ Very, **very** neat and powerful. Let's explain:
   - The first parameter is the category: not very well documented, it acts as a *StartsWith* or *Contains* filter on the type name `T` of `ILogger<T>`, allowing to filter which logs we want to listen or mute.
   - The second parameter takes a `LogLevel`, allowing to listen only when log have a lower greater or equal than the specifed parameter.
 
+This configuration can also be made via [configuration files](https://docs.microsoft.com/fr-fr/aspnet/core/fundamentals/configuration/options?view=aspnetcore-2.2).
 Now, every time a `ILogger<T>` is required, as in our `MyService` constructor, an instance will be injected, and this instance will log to the destinations registered.
 
 ### 6. Test run
 
-After the Console App launch, this is what we see in the Console window:
+After the Console App launch, this is what we see in the Console window. Note that only Warn, Error and Critical logs are written, as configured:
 
-And this is what we see in the Debug window:
+![Console output]({{site.baseurl}}/images/2019-04-27-console.png)
+
+And this is what we see in the Debug window, note that Info level is also written, as configured:
+
+![Debug output]({{site.baseurl}}/images/2019-04-27-debug.png)
 
 
 ## Conclusion
