@@ -1,5 +1,5 @@
 ---
-published: true
+published: false
 layout: post
 title: Logging from a Library in .Net Core
 comments: true
