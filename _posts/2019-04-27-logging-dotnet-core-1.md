@@ -77,25 +77,21 @@ This interface resides in the NuGet package `Microsoft.Extensions.Logging.Abstra
 
 This is not tied to ASP.Net alone in any way. We can use it in our library!
 
-
+This interface is simple and allows log calls to be made without having a concrete implementation.
 
 Let's setup :
 
 - A library with a simple service. We want this service to log its activity.
 - A Console app referencing the library and calling the service.
 
-## 1) Create the class library *MyLibrary*
+### 1. Create the class library *MyLibrary*
 
 From Visual Studio, choose *New Project > Class Library*,
 or with .Net CLI :
 
-```
+```bash
 dotnet new classlib -n MyLibrary
 ```
-
-This will create a class library project.
-
-
 
 ## Sources
 
