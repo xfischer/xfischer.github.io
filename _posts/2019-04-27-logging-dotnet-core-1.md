@@ -69,7 +69,7 @@ Logger.Info($"Processing file {fileName}...");
 
 ## The solution
 
-### The ILogger interface
+### The `ILogger<T>` interface
 
 This interface resides in the NuGet package `Microsoft.Extensions.Logging.Abstractions`, which is part of [ASP.Net Extensions catalog](https://github.com/aspnet/Extensions).
 
@@ -77,21 +77,70 @@ This interface resides in the NuGet package `Microsoft.Extensions.Logging.Abstra
 
 This is not tied to ASP.Net alone in any way. We can use it in our library!
 
-This interface is simple and allows log calls to be made without having a concrete implementation.
+This interface is simple and allows log calls to be made without having a concrete implementation. Don't dive into the internals, it's made for ease of use. Just remember that the generic type T is the type of the service for which the logging is made. Remember T as T*YourService*.
 
 Let's setup :
 
 - A library with a simple service. We want this service to log its activity.
 - A Console app referencing the library and calling the service.
 
-### 1. Create the class library *MyLibrary*
+### 1. Starting point : a class with your `SimpleService`
 
-From Visual Studio, choose *New Project > Class Library*,
-or with .Net CLI :
+Your service takes a param and simulates a long processing task for 1 second.
 
-```bash
-dotnet new classlib -n MyLibrary
+```csharp
+using System;
+using System.Threading;
+
+namespace MyLibrary
+{
+    public class MySimpleService
+    {
+        public void DoSomething(string theParam)
+        {
+            // Simultate something me do for 1 second
+            Thread.Sleep(1000);
+
+            // done
+        }
+    }
+}
 ```
+
+### 2. Add package Microsoft.Extensions.Logging.Abstractions
+
+You can do it by right clicking your project and choosing *Add NuGet Packages...* or via dotNet CLI:
+
+```cli
+nuget add Microsoft.Extensions.Logging.Abstractions
+```
+
+### 3. Add support for `ÌLogger<TYourService>`
+
+Change the service class as follows:
+
+- Add a constructor taking an `ILogger<SimpleService>`
+- Add a backing field for the logger
+
+```csharp
+public class MySimpleService
+{
+    // backing field
+    private readonly ILogger<MyService> _logger;
+    
+    // constructor
+    public MySimpleService(ILogger<MyService> logger = null)
+    {
+      _logger = logger;
+    }
+
+    // ... DoSomething omitted for brievety
+}
+```
+
+At this point nothing has changed in the implementation. If a program was calling `MyService`it still can do it after recompilation because the ILogger is optional.
+
+If the service had already a constructor, your could pass the ILogger as the last parameter.
 
 ## Sources
 
