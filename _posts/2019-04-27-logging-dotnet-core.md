@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 layout: post
 title: Logging from a Library in .Net Core
 comments: true
@@ -21,7 +21,7 @@ There are also a lot of good logging frameworks available (like SeriLog, NLog, L
 - At different levels (Trace, Debug, Info, Warn, Error, Critical) : it's very important to prioritize what's important and what's internal or critical.
 - With *categories*, allowing logical grouping of messages.
 
-**The rule-of-thumb is : read the log, and you should know exactly what is going on inside the code.**
+**The rule-of-thumb is : read the logs, and you should know exactly what is going on inside the code.**
 
 ## Wait. This would be a LOT of logs !
 
