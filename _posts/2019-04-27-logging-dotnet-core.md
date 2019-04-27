@@ -29,7 +29,7 @@ There are also a lot of good logging frameworks available (like SeriLog, NLog, L
 
 If no one is listening, logging is harmless. You can setup  **log listeners**.
 
-A listener can be registered and configured to listen to logs, with category and level filters. This listener then propagates log messages to a destination (Console, Debug window, ) Writing logs is one thing. Reading logs is something else.
+A listener can be registered and configured to listen to logs, with category and level filters. This listener then propagates log messages to a destination (Console, Debug window, ).
 
 # Show me the code
 
