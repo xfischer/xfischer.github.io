@@ -53,6 +53,3 @@ In the old .Net days, I have used a lot the ```System.Diagnostics.Trace``` class
 I have struggled for hours to setup this and I think it's good to share and transform the hours spent trying again and again in something useful to others.
 
 # How logging works ?
-
-
-{% github xfischer/CoreLoggingTests %}
