@@ -2,6 +2,7 @@
 published: true
 layout: post
 comments: true
+title: Hello World!
 tags:
   - general
   - story
