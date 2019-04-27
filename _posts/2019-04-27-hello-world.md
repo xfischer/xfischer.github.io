@@ -41,8 +41,10 @@ But English is more universal and I more people can reach my content if it is wr
 
 # The forthcoming articles
 
-- .Net Core: Logging and Dependency Injection and why it's awesome.
-- DEM-net: the story of this project, from Tour de France to 3D.
+- .Net Core: Logging and Dependency Injection and why it's awesome
+- DEM-net: the story of this project, from Tour de France to 3D
+- How I made this blog
+- Ableton Live and DMX: How I control lighting rig for theatre, the artisanal way
 
 So stay tuned, and don't hesitate to get back to me through comments, Twitter, LinkedIn or mail.
 
