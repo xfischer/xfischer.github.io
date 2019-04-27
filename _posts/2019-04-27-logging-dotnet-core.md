@@ -9,6 +9,7 @@ tags:
   - logging
 ---
 
+
 ## Foreword
 
 In this post, I'll try to explain how to setup logging (and dependency injection in the process) in a .Net Core library, and setup an application configuring listeners and filters as an example.
@@ -100,7 +101,7 @@ namespace MyNetStandardLib
     {
         public void DoSomething(string theParam)
         {
-            // Simultate something me do for 1 second
+            // Simulate something we do for 1 second
             Thread.Sleep(1000);
 
             // done
@@ -235,7 +236,7 @@ Let's explain:
 
 - We create the DI container `ServicesCollection` and configure it in a separate method for clarity.
 - We register our `MyService` as a Transient (ie: short lived instance within the calling code variable's scope)
-- When we call `var myService = serviceProvider.GetService<MyNetStandardLib.MyService>();` the DI container will instanciate the `MyService` and will chech the dependency tree for the object and pass required instances that are registered within the container. As we have still not registered any `ILogger`, a `null` will be passed.
+- When we call `var myService = serviceProvider.GetService<MyNetStandardLib.MyService>();` the DI container will instanciate the `MyService` and will check the dependency tree for the object and pass required instances that are registered within the container. As we have still not registered any `ILogger`, a `null` will be passed.
 - We can use the `myService` variable as usual, calling the `DoSomething` service
 
 ### 5. Add Logging support
@@ -280,7 +281,7 @@ Very, **very** neat and powerful. Let's explain:
 - `services.AddLogging` allows us to add *various* loggers to the DI container and configure their options. Here we register the *Console* and *Debug* loggers with `AddConsole()` and `AddDebug()`: two extensions methods provided by their respective NuGet packages.
 - Then we configure (optionally) their filter level.
   - The first parameter is the category: not very well documented, it acts as a *StartsWith* or *Contains* filter on the type name `T` of `ILogger<T>`, allowing to filter which logs we want to listen or mute.
-  - The second parameter takes a `LogLevel`, allowing to listen only when log have a lower greater or equal than the specifed parameter.
+  - The second parameter takes a `LogLevel`, allowing to listen only when log have a lower greater or equal than the specified parameter.
 
 This configuration can also be made via [configuration files](https://docs.microsoft.com/fr-fr/aspnet/core/fundamentals/configuration/options?view=aspnetcore-2.2).
 Now, every time a `ILogger<T>` is required, as in our `MyService` constructor, an instance will be injected, and this instance will log to the destinations registered.
@@ -298,7 +299,7 @@ And this is what we see in the Debug window, note that Info level is also writte
 
 ## Conclusion
 
-We have seen how powerful Dependency Injection is, and how we can build a library that supports logging without constrainind the calling application.
+We have seen how powerful Dependency Injection is, and how we can build a library that supports logging without constraining the calling application.
 
 You can find all the source files for this project here (Tested on VS2019, both Windows and Mac) : [https://github.com/xfischer/CoreLoggingTests](https://github.com/xfischer/CoreLoggingTests).
 
