@@ -248,7 +248,7 @@ Add the following NuGet packages:
 - `Microsoft.Extensions.Logging.Console`
 - `Microsoft.Extensions.Logging.Debug`
 
-Add the following `using` statements at the top of `Program.cs``
+Add the following `using` statements at the top of `Program.cs`
 
 ```csharp
 using Microsoft.Extensions.Logging;
