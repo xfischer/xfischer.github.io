@@ -4,7 +4,9 @@ layout: post
 title: Logging from a Library in .Net Core
 comments: true
 tags:
-  - dotnet - core - logging - console
+  - dotnet
+  - netcore
+  - logging
 ---
 In this post, I'll try to explain how to setup logging (and dependency injection in the process) in a .Net Core library, and setup an application configuring listeners and filters as an example.
 
