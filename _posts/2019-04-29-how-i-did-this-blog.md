@@ -2,7 +2,7 @@
 published: false
 layout: post
 comments: true
-title: How to start your blog for free using GitHub Pages
+title: How I did this blog
 tags:
   - blogging
   - general
