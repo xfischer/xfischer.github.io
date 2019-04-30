@@ -65,7 +65,7 @@ Logger.Info($"Processing file {fileName}...");
 
 - Using ```System.Diagnostics.Trace```, library consumers are constrained to listen to Traces, and coded this way, there is no categories to enable them to filter out those trace logs.
 - Depending on the consumer logging system, they may need to redirect my Trace output. That's a lot to ask, they may never do that.
-- I need to enable logging **without actually logging anywhere**. The consumer can be able to choose where the traces go, either Console, Trace, a Database, Envent Logs, File, ...
+- I need to enable logging **without actually logging anywhere**. The consumer can be able to choose where the traces go, either Console, Trace, a Database, Event Logs, File, ...
 - I need to find a solid solution, where there is no custom hand-coded class, I want to be pro.
 
 ## The solution
