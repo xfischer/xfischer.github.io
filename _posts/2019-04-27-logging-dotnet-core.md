@@ -118,7 +118,7 @@ You can do it by right clicking your project and choosing *Add NuGet Packages...
 nuget add Microsoft.Extensions.Logging.Abstractions
 ```
 
-### 3. Add support for `ÌLogger<TYourService>`
+### 3. Add support for `ILogger<TYourService>`
 
 Change the service class as follows:
 
@@ -158,7 +158,7 @@ public class MyService
 At this point, apart from the new *Microsoft.Extensions.Logging.Abstractions* dependency, nothing has changed from a caller perspective.
 
 - If a program was calling `MyService` it still can do it after recompilation because the `ILogger` is optional.
-- If `null` is passed for the `ÌLogger`, the service still works thanks to the null check operator `_logger`**?**`.LogInformation()` which is equivalent to:
+- If `null` is passed for the `ILogger`, the service still works thanks to the null check operator `_logger`**?**`.LogInformation()` which is equivalent to:
 
 ```csharp
 if (_logger != null)  _logger.LogInformation(...);
