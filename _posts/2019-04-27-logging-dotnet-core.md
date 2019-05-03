@@ -281,7 +281,7 @@ Very, **very** neat and powerful. Let's explain:
 - `services.AddLogging` allows us to add *various* loggers to the DI container and configure their options. Here we register the *Console* and *Debug* loggers with `AddConsole()` and `AddDebug()`: two extensions methods provided by their respective NuGet packages.
 - Then we configure (optionally) their filter level.
   - The first parameter is the category: not very well documented, it acts as a *StartsWith* or *Contains* filter on the type name `T` of `ILogger<T>`, allowing to filter which logs we want to listen or mute.
-  - The second parameter takes a `LogLevel`, allowing to listen only when log have a lower greater or equal than the specified parameter.
+  - The second parameter takes a `LogLevel`, allowing to listen only when log have a level greater or equal than the specified parameter.
 
 This configuration can also be made via [configuration files](https://docs.microsoft.com/fr-fr/aspnet/core/fundamentals/configuration/options?view=aspnetcore-2.2).
 Now, every time a `ILogger<T>` is required, as in our `MyService` constructor, an instance will be injected, and this instance will log to the destinations registered.
